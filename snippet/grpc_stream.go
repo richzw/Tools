@@ -1,5 +1,8 @@
 package snippet
 
+type MyThing struct {
+}
+
 // One way to close grpc stream on server side
 func (m *MyThing) MyBidiServer(stream somepb.Thing_ThingServer) {
 	can := make(chan struct{})
