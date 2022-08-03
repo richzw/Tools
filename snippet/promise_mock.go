@@ -28,3 +28,40 @@ func (p *Promise) Then(r func(string), e func(error)) {
 		r(p.res)
 	}()
 }
+
+// With channel
+// http://www.home.hs-karlsruhe.de/~suma0002/publications/events-to-futures.pdf
+type Comp struct {
+	value interface{}
+	ok    bool
+}
+
+type Future chan Comp
+
+func future(f func() (interface{}, bool)) Future {
+	future := make(chan Comp)
+
+	go func() {
+		v, o := f()
+		c := Comp{v, o}
+		for {
+			future <- c
+		}
+	}()
+
+	return future
+}
+
+type Promise struct {
+	lock chan int
+	ft   Future
+	full bool
+}
+
+func promise() Promise {
+	return Promise{make(chan int, 1), make(chan Comp), false}
+}
+
+func (pr Promise) future() Future {
+	return pr.ft
+}
