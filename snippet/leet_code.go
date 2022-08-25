@@ -447,6 +447,136 @@ func canDone(n int, arr [][]int) bool {
 	return len(ret) == n
 }
 
+type Node struct {
+	Val  int
+	Next *Node
+}
+
+func midList(head *Node) *Node {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	fast := head
+	slow := head
+
+	for fast.Next != nil && fast.Next.Next != nil {
+		fast = fast.Next.Next
+		slow = slow.Next
+	}
+
+	tmp := slow.Next
+	slow.Next = nil
+	slow = tmp
+	return slow
+}
+
+func mergeTwoLists(l1 *Node, l2 *Node) *Node {
+	if l1 == nil {
+		return l2
+	}
+	if l2 == nil {
+		return l1
+	}
+	if l1.Val < l2.Val {
+		l1.Next = mergeTwoLists(l1.Next, l2)
+		return l1
+	}
+	l2.Next = mergeTwoLists(l1, l2.Next)
+	return l2
+}
+
+func ListM(left, right *Node) *Node {
+	dummy := &Node{}
+	cur := dummy
+	for left != nil && right != nil {
+		if left.Val < right.Val {
+			cur.Next = left
+			left = left.Next
+		} else {
+			cur.Next = right
+			right = right.Next
+		}
+		cur = cur.Next
+	}
+
+	if left != nil {
+		cur.Next = left
+	}
+	if right != nil {
+		cur.Next = right
+	}
+
+	return dummy.Next
+}
+
+func ListMergeS(head *Node) *Node {
+	if head == nil || head.Next == nil {
+		return head
+	}
+
+	mid := midList(head)
+	left := ListMergeS(head)
+	right := ListMergeS(mid)
+
+	return ListM(left, right)
+}
+
+func MinTotalV2(trian [][]int) int {
+	dy := len(trian)
+	dx := len(trian[dy-1])
+	dp := make([][]int, dy+1)
+	for i := range dp {
+		dp[i] = make([]int, dx+1)
+	}
+
+	for i := dy - 1; i >= 0; i-- {
+		for j := 0; j <= i; j++ {
+			dp[i][j] = MinVal(dp[i+1][j], dp[i+1][j+1]) + trian[i][j]
+		}
+	}
+
+	return dp[0][0]
+}
+
+func parti(arr []int, l, r int) int {
+	pivot := l
+	left := l - 1
+	right := r + 1
+
+	for {
+		for {
+			left++
+			if arr[left] >= arr[pivot] {
+				break
+			}
+		}
+
+		for {
+			right--
+			if arr[right] <= arr[pivot] {
+				break
+			}
+		}
+
+		if left >= right {
+			return right
+		}
+
+		arr[left], arr[right] = arr[right], arr[left]
+	}
+}
+
+func quicS(arr []int, left, right int) {
+	if left >= right {
+		return
+	}
+
+	pivot := parti(arr, left, right)
+	quicS(arr, left, pivot)
+	quicS(arr, pivot+1, right)
+	return
+}
+
 func bsLower(arr []int, target int) int {
 	left := -1
 	right := len(arr) - 1
