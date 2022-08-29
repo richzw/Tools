@@ -1,6 +1,9 @@
 package snippet
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 type TreeNode struct {
 	Val   int
@@ -536,6 +539,75 @@ func MinTotalV2(trian [][]int) int {
 	}
 
 	return dp[0][0]
+}
+
+func maxSu(arr []int) int {
+	l := len(arr)
+	sum := 0
+	cur := 0
+
+	for i := 0; i < l; i++ {
+		for j := 0; j <= i; j++ {
+			sum = 0
+			for k := j; k < i; k++ {
+				sum += arr[k]
+			}
+			cur = MaxVal(cur, sum)
+		}
+	}
+
+	return cur
+}
+
+func maxSuV2(arr []int) int {
+	l := len(arr)
+	sum := 0
+	cur := 0
+
+	// 我们在第一层循环确定一个变量 i，然后在第二层循环依次计算 nums[i..i]、nums[i..i+1] 一直到 nums[i..n-1] 的和。
+	// 我们可以直接在一个 sum 变量上依次累加，而不需要使用第三层循环进行累加。
+	for i := 0; i < l; i++ {
+		sum = 0
+		for j := i; j < l; j++ {
+			sum += arr[j]
+			cur = MaxVal(cur, sum)
+		}
+	}
+
+	return cur
+}
+
+func maxSuV3(arr []int) int {
+	// 子问题：
+	// f(k) = nums[0..k) 中以 nums[k-1] 结尾的最大子数组和
+	// 原问题 = max{ f(k) }, 0 <= k <= N
+
+	// f(0) = 0
+	// f(k) = max{ f(k-1), 0 } + nums[k-1]
+	L := len(arr)
+	dp := make([]int, L+1)
+	dp[0] = 0
+
+	res := math.MinInt
+	for i := 1; i <= L; i++ {
+		dp[i] = MaxVal(dp[i-1], 0) + arr[i-1]
+		res = MaxVal(res, dp[i])
+	}
+
+	return res
+}
+
+func maxSuV4(arr []int) int {
+	sum := 0
+	res := math.MinInt
+	for _, v := range arr {
+		if sum < 0 {
+			sum = 0
+		}
+		sum += v
+		res = MaxVal(res, sum)
+	}
+	return res
 }
 
 func parti(arr []int, l, r int) int {
