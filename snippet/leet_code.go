@@ -3,6 +3,7 @@ package snippet
 import (
 	"fmt"
 	"math"
+	"strings"
 )
 
 type TreeNode struct {
@@ -683,4 +684,60 @@ func bsUpper(arr []int, target int) int {
 	}
 
 	return right
+}
+
+// 139 - 单词拆分
+func wordBreak(s string, dict []string) bool {
+	track := []string{}
+
+	found := false
+	backtrackPermuteDup(s, dict, track, &found)
+
+	return found
+}
+
+func backtrackPermuteDup(target string, dict, track []string, found *bool) {
+	if *found {
+		return
+	}
+
+	if len(strings.Join(track, "")) > len(target) {
+		return
+	}
+
+	for i := 0; i < len(dict); i++ {
+		track = append(track, dict[i])
+
+		if strings.Join(track, "") == target {
+			*found = true
+		}
+
+		backtrackPermuteDup(target, dict, track, found)
+
+		track = track[:len(track)-1]
+	}
+}
+
+/*
+对于输入的字符串s，如果我能够从单词列表wordDict中找到一个单词匹配s的前缀s[0..k]，那么只要我能拼出s[k+1..]，就一定能拼出整个s。
+换句话说，我把规模较大的原问题wordBreak(s[0..])分解成了规模较小的子问题wordBreak(s[k+1..])，然后通过子问题的解反推出原问题的解。
+*/
+func wordBreakV2(word string, dict []string) bool {
+	return wdp(word, 0, dict)
+}
+
+func wdp(word string, idx int, dict []string) bool {
+	if idx == len(word) {
+		return true
+	}
+
+	for _, s := range dict {
+		if strings.HasPrefix(word[idx:], s) {
+			if wdp(word, idx+len(s), dict) {
+				return true
+			}
+		}
+	}
+
+	return false
 }
