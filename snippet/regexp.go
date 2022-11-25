@@ -1,7 +1,6 @@
 package snippet
 
-// Package repike implements Rob Pike's simple C regex matcher in Go.
-package repike
+// Implements Rob Pike's simple C regex matcher in Go.
 
 // Match reports whether regexp matches anywhere in text.
 func Match(regexp, text string) bool {
