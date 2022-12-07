@@ -525,6 +525,22 @@ func ListMergeS(head *Node) *Node {
 	return ListM(left, right)
 }
 
+func MinVal(a, b int) int {
+	if a < b {
+		return a
+	} else {
+		return b
+	}
+}
+
+func MaxVal(a, b int) int {
+	if a < b {
+		return b
+	} else {
+		return a
+	}
+}
+
 func MinTotalV2(trian [][]int) int {
 	dy := len(trian)
 	dx := len(trian[dy-1])
@@ -741,3 +757,5 @@ func wdp(word string, idx int, dict []string) bool {
 
 	return false
 }
+
+// TODO: 给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置

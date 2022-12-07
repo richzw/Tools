@@ -1,6 +1,6 @@
 module github.com/Tools
 
-go 1.15
+go 1.18
 
 require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.14.0
