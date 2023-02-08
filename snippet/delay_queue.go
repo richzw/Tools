@@ -7,6 +7,20 @@ import (
 	"time"
 )
 
+/*
+- PriorityQueue + polling
+  - A big issue with this approach is
+    - If the interval is too small, it will be a huge workload for the CPU;
+    - If the interval is too large, the real execution time of a task might not be accurate (it will be delayed).
+- PriorityQueue + timer
+  - Instead of polling periodically, what we can do is: get the delay time of the current peek task, set a timer with the time, check again when the timer is up.
+- Java DelayQueue
+  - we still use a priority queue to manage all tasks and the peek is the one with the shortest delay time.
+  - Instead of using polling or timer, we use the wait/notify(signal) to handle the concurrency problems.
+  - If there are many threading that blocks on take() functions (i.e., they are all waiting to get an element from the queue),
+  - we use a leader/follower pattern to efficiently minimize unnecessary timed waiting. The leader will only wait for the delay time of the peek element in the queue, while other threads need to wait until signaled.
+*/
+
 // The start of PriorityQueue implementation.
 // Borrowed from https://github.com/nsqio/nsq/blob/master/internal/pqueue/pqueue.go
 
