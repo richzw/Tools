@@ -5,6 +5,32 @@ import (
 	"reflect"
 )
 
+// Generic Set
+type Set[E comparable] map[E]struct{}
+
+func NewSet[E comparable]() Set[E] {
+	return Set[E]{}
+}
+
+func (s Set[E]) Add(vals ...E) {
+	for _, v := range vals {
+		s[v] = struct{}{}
+	}
+}
+
+func (s Set[E]) Members() []E {
+	result := make([]E, 0, len(s))
+	for v := range s {
+		result = append(result, v)
+	}
+	return result
+}
+
+func (s Set[E]) Remove(e E) {
+	delete(s, e)
+}
+
+// Unmarshal protobuf message in a generic way
 func UnmarshalProtoMsgInGenericWay(body []byte, msg proto.Message) error {
 	msgType := reflect.TypeOf(msg).Elem()
 	msg = reflect.New(msgType).Interface().(proto.Message)
