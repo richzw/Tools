@@ -759,3 +759,7 @@ func wdp(word string, idx int, dict []string) bool {
 }
 
 // TODO: 给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置
+
+// Triangular sum of an array
+// Given an array of integers, find the Triangular number of the array.
+// https://leetcode.com/problems/find-triangular-sum-of-an-array/solutions/1907380/O(n)-time-O(1)-space-Python-189-ms-C++-12-ms-Java-4-ms/
